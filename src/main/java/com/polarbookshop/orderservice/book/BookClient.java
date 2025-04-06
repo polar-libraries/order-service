@@ -14,10 +14,11 @@ public class BookClient {
 
     private static final String BOOK_ROOT_API = "/books/";
     private final WebClient webClient;
-    private ClientProperties clientProperties;
+    private final ClientProperties clientProperties;
 
-    public BookClient(WebClient webClient) {
+    public BookClient(WebClient webClient, ClientProperties clientProperties) {
         this.webClient = webClient;
+        this.clientProperties = clientProperties;
     }
 
     public Mono<Book> getBookByIsbn(String isbn) {
@@ -30,7 +31,8 @@ public class BookClient {
                 .onErrorResume(WebClientResponseException.class, exception -> Mono.empty())
                 .retryWhen(
                         Retry.backoff(3, Duration.ofMillis(300))
-                );
+                )
+                .onErrorResume(Exception.class, e -> Mono.empty());
     }
 
 }
