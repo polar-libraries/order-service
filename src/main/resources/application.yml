@@ -52,6 +52,12 @@ spring:
     username: user
     password: password
     connection-timeout: 5s
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://polar-keycloak:8080/realms/PolarBookshop
+
 polar:
   catalog-service-uri: "http://localhost:9001"
   temp-limit: 5
