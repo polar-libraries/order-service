@@ -44,8 +44,8 @@ public class OrderService {
         return Order.of(bookIsbn, null, null, quantity, OrderStatus.REJECTED);
     }
 
-    public Flux<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public Flux<Order> getAllOrders(String userId) {
+        return orderRepository.findAllByCreatedBy(userId);
     }
 
     public Flux<Order> consumeOrderDispatchedEvent(Flux<OrderDispatchedMessage> flux) {
@@ -60,6 +60,7 @@ public class OrderService {
                 existingOrder.bookPrice(),
                 existingOrder.quantity(), OrderStatus.DISPATCHED,
                 existingOrder.createdDate(), existingOrder.lastModifiedDate(),
+                existingOrder.createdBy(), existingOrder.lastModifiedBy(),
                 existingOrder.version());
     }
 
