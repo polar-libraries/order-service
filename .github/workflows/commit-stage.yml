@@ -3,8 +3,8 @@ on: push
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: polar-libraries/order-service
-  VERSION: latest
+  IMAGE_NAME: polarbookshop/order-service
+  VERSION: ${{ github.sha }}
 
 jobs:
   build:
@@ -43,10 +43,11 @@ jobs:
       - name: Install tools
         uses: alexellis/arkade-get@master
         with:
+          kustomize: latest
           kubeconform: latest
       - name: Validate Kubernetes manifests
         run: |
-          kubeconform --strict k8s
+          kustomize build k8s | kubeconform --strict -
   package:
     name: Package and Publish
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -90,3 +91,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish container image
         run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+      - name: Publish container image (latest)
+        run: |
+          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
