@@ -6,7 +6,7 @@ spring:
   flyway:
     url: jdbc:postgresql://polar-postgres/polardb_order
   rabbitmq:
-    host: localhost
+    host: polar-rabbitmq
   security:
     oauth2:
       resourceserver:
