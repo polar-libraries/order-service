@@ -9,7 +9,7 @@ concurrency: acceptance
 env:
   OWNER: polar-libraries
   REGISTRY: ghcr.io
-  APP_REPO: edge-service
+  APP_REPO: order-service
   DEPLOY_REPO: polar-deployment
   VERSION: ${{ github.sha }}
 
